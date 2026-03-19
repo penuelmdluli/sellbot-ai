@@ -1,70 +1,154 @@
 "use client"
+import { useState } from "react"
 import Link from "next/link"
 
 const FEATURES = [
-  { icon: "🤖", title: "AI Listing Generator", desc: "Generate SEO-optimized product titles, descriptions, and keywords for Takealot, Amazon SA, and Makro in seconds" },
-  { icon: "💰", title: "Smart Price Optimizer", desc: "Monitor competitor prices and automatically suggest optimal pricing to maximize sales and profit margins" },
-  { icon: "📦", title: "Inventory Tracker", desc: "Track stock across multiple platforms in one dashboard. Get alerts before you run out" },
-  { icon: "📊", title: "Sales Analytics", desc: "Unified dashboard for sales data across all your marketplaces. Know what's selling and what's not" },
-  { icon: "⚡", title: "Bulk Product Upload", desc: "Upload hundreds of products at once with AI-generated content. What used to take days now takes minutes" },
-  { icon: "🔍", title: "Competitor Intelligence", desc: "Monitor what your top competitors are selling, pricing, and promoting. Stay ahead automatically" }
+  { icon: "🏪", title: "Multi-Marketplace Sync", desc: "List once. Sell on Takealot, Amazon SA, Makro, Bob Shop simultaneously. Inventory synced in real-time." },
+  { icon: "💲", title: "AI Dynamic Pricing", desc: "AI monitors competitor prices 24/7 and adjusts your prices to win the buy box while protecting margins." },
+  { icon: "📦", title: "Smart Inventory Management", desc: "Never overstock or stock out. AI predicts demand and alerts you when to reorder, automatically." },
+  { icon: "✍️", title: "AI Product Descriptions", desc: "Claude AI writes SEO-optimised product titles, descriptions, and bullet points that convert browsers into buyers." },
+  { icon: "📊", title: "Profit Analytics", desc: "Real-time profit calculator per SKU after all marketplace fees, shipping, and COGS. Know your numbers instantly." },
+  { icon: "🚚", title: "Order Automation", desc: "Auto-confirm orders, generate waybills, notify customers, and update tracking across all marketplaces." }
 ]
 
-export default function SellBotHome() {
+const PLANS = [
+  { name: "Starter", price: 299, color: "#6366f1", skus: 50, marketplaces: 1, features: ["50 SKUs", "1 marketplace", "AI pricing", "Basic analytics", "Email support"] },
+  { name: "Growth", price: 699, color: "#8b5cf6", popular: true, skus: 500, marketplaces: 3, features: ["500 SKUs", "3 marketplaces", "AI descriptions", "Profit analytics", "Demand forecasting", "Priority support"] },
+  { name: "Pro", price: 1499, color: "#a855f7", skus: 0, marketplaces: 0, features: ["Unlimited SKUs", "All marketplaces", "Custom AI rules", "White-label reports", "API access", "Dedicated manager"] }
+]
+
+export default function SellBotLanding() {
+  const [email, setEmail] = useState("")
+  const [joined, setJoined] = useState(false)
+
+  const handleWaitlist = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) })
+    setJoined(true)
+  }
+
   return (
-    <div className="min-h-screen bg-[#040810] grid-bg">
-      <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto border-b border-[#1a1a1a]">
-        <div className="font-black text-xl">🛒 Sell<span className="text-[#10B981]">Bot</span> <span className="text-gray-500 text-sm font-normal">AI</span></div>
-        <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm text-gray-400 hover:text-white">Login</Link>
-          <Link href="/signup" className="bg-[#10B981] text-black text-sm font-bold px-4 py-2 rounded-lg hover:bg-green-400">Start Free →</Link>
+    <div className="min-h-screen bg-[#0f0f23] text-white overflow-x-hidden">
+      {/* Gradient */}
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,#1e1b4b_0%,transparent_60%)] pointer-events-none" />
+
+      {/* NAV */}
+      <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
+        <div className="font-black text-xl">
+          Sell<span className="text-indigo-400">Bot</span>
+          <span className="text-indigo-400 ml-1 text-sm">AI</span>
         </div>
-      </nav>
-      <section className="text-center px-6 py-24 max-w-5xl mx-auto">
-        <div className="inline-flex items-center gap-2 bg-[#10B98111] border border-[#10B98133] text-[#10B981] text-xs px-4 py-2 rounded-full mb-8 tracking-widest">🛒 TAKEALOT · AMAZON SA · MAKRO · FULLY AUTOMATED</div>
-        <h1 className="text-5xl md:text-7xl font-black leading-none mb-6">Sell More.<br/><span className="text-[#10B981]">Work Less.</span></h1>
-        <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">SellBot AI automates your entire e-commerce operation. AI-generated listings, smart pricing, inventory management, and competitor tracking — all in one place.</p>
-        <Link href="/signup" className="inline-block bg-[#10B981] text-black font-black px-8 py-4 rounded-xl text-lg hover:bg-green-400 transition-all hover:scale-105">
-          Start Selling Smarter →
+        <div className="hidden md:flex gap-8 text-sm text-slate-400">
+          {["Features", "Pricing", "Marketplaces"].map(l => <a key={l} href={`#${l.toLowerCase()}`} className="hover:text-white transition-colors">{l}</a>)}
+        </div>
+        <Link href="/dashboard" className="bg-indigo-600 text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-indigo-500 transition-colors">
+          Dashboard →
         </Link>
+      </nav>
+
+      {/* HERO */}
+      <section className="relative z-10 px-6 pt-16 pb-24 max-w-5xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 border border-indigo-500/30 text-indigo-300 text-xs px-4 py-2 rounded-full mb-8 bg-indigo-500/10">
+          🤖 AI-POWERED E-COMMERCE FOR SOUTH AFRICA
+        </div>
+        <h1 className="text-5xl md:text-7xl font-black leading-none mb-6">
+          Sell More.<br />
+          <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Work Less.</span><br />
+          Scale Faster.
+        </h1>
+        <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          SellBot AI automates your entire e-commerce operation — from listing to fulfilment — across Takealot, Amazon SA, and Makro. Set up in 15 minutes.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
+          {[{v:"3",l:"Marketplaces"},{v:"50+",l:"Hours Saved/Month"},{v:"AI",l:"Dynamic Pricing"},{v:"24/7",l:"Auto-Running"}].map((s,i)=>(
+            <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <div className="text-2xl font-black text-indigo-400">{s.v}</div>
+              <div className="text-xs text-slate-500 mt-1">{s.l}</div>
+            </div>
+          ))}
+        </div>
+        {joined ? (
+          <div className="bg-indigo-900/30 border border-indigo-500/40 rounded-2xl p-8 max-w-md mx-auto">
+            <div className="text-3xl mb-3">🎉</div>
+            <h3 className="font-black text-xl text-indigo-300">You're on the list!</h3>
+            <p className="text-slate-400 mt-2 text-sm">We'll email you when your account is ready. Expected: 48 hours.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleWaitlist} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
+              placeholder="Enter your email" className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" />
+            <button type="submit" className="bg-indigo-600 text-white font-black px-6 py-3 rounded-xl hover:bg-indigo-500 transition-colors whitespace-nowrap">
+              Get Early Access →
+            </button>
+          </form>
+        )}
       </section>
-      <section className="px-6 py-20 max-w-6xl mx-auto">
+
+      {/* FEATURES */}
+      <section id="features" className="relative z-10 px-6 py-20 max-w-6xl mx-auto">
+        <h2 className="text-4xl font-black text-center mb-12">Everything Automated</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {FEATURES.map((f,i) => (
-            <div key={i} className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-xl p-6 hover:border-[#10B98133] transition-colors">
-              <div className="text-3xl mb-3">{f.icon}</div>
-              <div className="font-bold mb-2">{f.title}</div>
-              <div className="text-sm text-gray-400 leading-relaxed">{f.desc}</div>
+          {FEATURES.map((f, i) => (
+            <div key={i} className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 hover:border-indigo-500/40 transition-all">
+              <div className="text-4xl mb-4">{f.icon}</div>
+              <h3 className="font-black text-lg mb-2">{f.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
-      <section className="px-6 py-20 max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-black">Pricing</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
+
+      {/* MARKETPLACES */}
+      <section id="marketplaces" className="relative z-10 px-6 py-16 max-w-4xl mx-auto text-center">
+        <h2 className="text-3xl font-black mb-4">Supported Marketplaces</h2>
+        <p className="text-slate-400 mb-10">Connect once. Sell everywhere.</p>
+        <div className="flex flex-wrap justify-center gap-6">
           {[
-            { name:"Starter", price:299, features:["1 marketplace","50 AI listings/mo","Basic analytics","Email support"], color:"#00E5FF" },
-            { name:"Pro", price:699, features:["3 marketplaces","Unlimited listings","Price optimizer","Competitor tracking","WhatsApp alerts"], color:"#10B981", popular:true },
-            { name:"Business", price:1499, features:["All marketplaces","Bulk upload (1000+)","Full automation","API access","Priority support"], color:"#FFD700" }
-          ].map((p,i) => (
-            <div key={i} className={`bg-[#0d0d0d] rounded-2xl p-8 border relative ${(p as any).popular?"border-[#10B98166] scale-105":"border-[#1a1a1a]"}`}>
-              {(p as any).popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#10B981] text-black text-xs font-black px-4 py-1.5 rounded-full">POPULAR</div>}
-              <div className="text-xs mb-2" style={{color:p.color}}>{p.name.toUpperCase()}</div>
-              <div className="text-4xl font-black mb-4">R{p.price}<span className="text-gray-500 text-lg">/mo</span></div>
-              <ul className="space-y-2 mb-8">{p.features.map((f,j) => <li key={j} className="flex items-center gap-2 text-sm text-gray-300"><span style={{color:p.color}}>✓</span>{f}</li>)}</ul>
-              <Link href="/signup" className="block w-full text-center py-3 rounded-xl font-bold"
-                style={{background:(p as any).popular?"#10B981":"transparent",color:(p as any).popular?"black":p.color,border:(p as any).popular?"none":`1px solid ${p.color}55`}}>
-                Get Started →
+            { name: "Takealot", emoji: "🛒", status: "Live" },
+            { name: "Amazon SA", emoji: "📦", status: "Live" },
+            { name: "Makro", emoji: "🏭", status: "Beta" },
+            { name: "Bob Shop", emoji: "🛍️", status: "Coming Soon" },
+            { name: "Loot", emoji: "💎", status: "Coming Soon" }
+          ].map((m, i) => (
+            <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl px-6 py-4 text-center">
+              <div className="text-3xl mb-2">{m.emoji}</div>
+              <div className="font-bold text-sm">{m.name}</div>
+              <div className={`text-xs mt-1 ${m.status === "Live" ? "text-green-400" : m.status === "Beta" ? "text-yellow-400" : "text-slate-500"}`}>
+                {m.status}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section id="pricing" className="relative z-10 px-6 py-20 max-w-5xl mx-auto">
+        <h2 className="text-4xl font-black text-center mb-12">Simple Pricing</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {PLANS.map((plan, i) => (
+            <div key={i} className={`relative bg-slate-900 rounded-2xl p-8 border ${plan.popular ? "border-indigo-500/60 scale-105" : "border-slate-800"}`}>
+              {plan.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-black px-4 py-1.5 rounded-full">MOST POPULAR</div>}
+              <div className="text-xs tracking-widest mb-2" style={{ color: plan.color }}>{plan.name}</div>
+              <div className="text-4xl font-black mb-4">R{plan.price}<span className="text-slate-500 text-sm">/mo</span></div>
+              <ul className="space-y-2 mb-8">
+                {plan.features.map((f, j) => (
+                  <li key={j} className="flex items-center gap-2 text-sm text-slate-300">
+                    <span style={{ color: plan.color }}>✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/dashboard" className="block w-full text-center py-3 rounded-xl font-bold transition-colors"
+                style={{ background: plan.popular ? "#6366f1" : "transparent", color: plan.popular ? "#fff" : plan.color, border: plan.popular ? "none" : `1px solid ${plan.color}55` }}>
+                Start Free Trial →
               </Link>
             </div>
           ))}
         </div>
       </section>
-      <footer className="border-t border-[#1a1a1a] px-6 py-8 text-center text-sm text-gray-600">
-        <div className="font-black text-white mb-2">🛒 SellBot AI</div>
-        <p>© 2026 SellBot AI · Built for SA Sellers</p>
+
+      <footer className="relative z-10 border-t border-slate-800 px-6 py-8 text-center text-sm text-slate-600">
+        <div className="font-black text-white mb-2">Sell<span className="text-indigo-400">Bot</span> AI</div>
+        <p>© 2026 SellBot AI. South Africa 🇿🇦</p>
       </footer>
     </div>
   )
